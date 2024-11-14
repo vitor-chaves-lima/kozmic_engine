@@ -22,7 +22,7 @@ LRESULT CALLBACK WndProc(const HWND hwnd, const UINT message, const WPARAM wpara
 	return DefWindowProc(hwnd, message, wparam, lparam);
 }
 
-void RegisterWindow(const HINSTANCE hinstance,
+void RegisterWindow(const HINSTANCE& hinstance,
 					const std::wstring& window_class_name) {
 	const WNDCLASSEXW window_class = {
 		.cbSize = sizeof(WNDCLASSEXW),
@@ -43,7 +43,7 @@ void RegisterWindow(const HINSTANCE hinstance,
 	}
 }
 
-HWND CreateWin32Window(HINSTANCE hinstance, const wchar_t* window_class_name,
+HWND CreateWin32Window(const HINSTANCE& hinstance, const wchar_t* window_class_name,
 					   const wchar_t* title, const int width, const int height) {
 	const HWND& hwnd = CreateWindowExW(
 		0,																// dwExStyle

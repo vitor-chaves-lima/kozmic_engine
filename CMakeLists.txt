@@ -3,4 +3,6 @@ project(kozmic)
 
 set(CMAKE_CXX_STANDARD 20)
 
+include("cmake/check_unicode_support.cmake")
+
 add_subdirectory(sandbox)
