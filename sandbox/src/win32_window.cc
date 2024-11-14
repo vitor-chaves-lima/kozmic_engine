@@ -22,9 +22,9 @@ LRESULT CALLBACK WndProc(const HWND hwnd, const UINT message, const WPARAM wpara
 	return DefWindowProc(hwnd, message, wparam, lparam);
 }
 
-template <typename STRING_TYPE>
+#if KOZMIC_UNICODE_SUPPORT == KOZMIC_TRUE
 void RegisterWindow(const HINSTANCE& hinstance,
-					const STRING_TYPE& window_class_name) {
+					const std::wstring& window_class_name) {
 	const WNDCLASSEXW window_class = {
 		.cbSize = sizeof(WNDCLASSEXW),
 		.lpfnWndProc = &WndProc,
@@ -44,24 +44,21 @@ void RegisterWindow(const HINSTANCE& hinstance,
 	}
 }
 
-template <typename STRING_TYPE>
 void UnregisterWindow(const HINSTANCE& hinstance,
-					  const STRING_TYPE& window_class_name) {
+					  const std::wstring& window_class_name) {
 	UnregisterClassW(window_class_name.c_str(), hinstance);
 }
 
-template <typename STRING_TYPE>
 HWND CreateWin32Window(const HINSTANCE& hinstance,
-					   const STRING_TYPE& window_class_name,
-					   const STRING_TYPE& title, const int width,
+					   const std::wstring& window_class_name,
+					   const std::wstring& title, const int width,
 					   const int height) {
-	const HWND& hwnd = CreateWindowExW(
-		0,																// dwExStyle
-		window_class_name.c_str(),					  					// lpClassName
-		title.c_str(),								  					// lpWindowName
-		WS_OVERLAPPEDWINDOW,											// dwStyle
-		CW_USEDEFAULT, CW_USEDEFAULT, width, height,				// X, Y, nWidth, nHeight
-		nullptr, nullptr, hinstance, nullptr);	// hWndParent, hMenu, hInstance, lpParam
+	const HWND& hwnd = CreateWindowExW(0,
+		window_class_name.c_str(),
+		title.c_str(),
+		WS_OVERLAPPEDWINDOW,
+		CW_USEDEFAULT, CW_USEDEFAULT, width, height,
+		nullptr, nullptr, hinstance, nullptr);
 
 	if (hwnd == nullptr) {
 		const char* error_message = FormatLastWindowsError();
@@ -72,6 +69,54 @@ HWND CreateWin32Window(const HINSTANCE& hinstance,
 
 	return hwnd;
 }
+#else
+void RegisterWindow(const HINSTANCE& hinstance,
+					const std::string& window_class_name) {
+	const WNDCLASSEXA window_class = {
+		.cbSize = sizeof(WNDCLASSEXA),
+		.lpfnWndProc = &WndProc,
+		.cbClsExtra = 0,
+		.cbWndExtra = 0,
+		.hInstance = hinstance,
+		.hIcon = nullptr,
+		.hCursor = LoadCursor(nullptr, IDC_ARROW),
+		.hbrBackground = static_cast<HBRUSH>(GetStockObject(BLACK_BRUSH)),
+		.lpszMenuName = nullptr,
+		.lpszClassName = window_class_name.c_str(),
+		.hIconSm = nullptr};
+
+	if (RegisterClassExA(&window_class) == 0) {
+		const char* error_message = FormatLastWindowsError();
+		throw std::runtime_error(error_message);
+	}
+}
+
+void UnregisterWindow(const HINSTANCE& hinstance,
+					  const std::string& window_class_name) {
+	UnregisterClassA(window_class_name.c_str(), hinstance);
+}
+
+HWND CreateWin32Window(const HINSTANCE& hinstance,
+					   const std::string& window_class_name,
+					   const std::string& title, const int width,
+					   const int height) {
+	const HWND& hwnd = CreateWindowExA(0,
+		window_class_name.c_str(),
+		title.c_str(),
+		WS_OVERLAPPEDWINDOW,
+		CW_USEDEFAULT, CW_USEDEFAULT, width, height,
+		nullptr, nullptr, hinstance, nullptr);
+
+	if (hwnd == nullptr) {
+		const char* error_message = FormatLastWindowsError();
+		throw std::runtime_error(error_message);
+	}
+
+	ShowWindow(hwnd, SW_HIDE);
+
+	return hwnd;
+}
+#endif
 
 Win32Window::Win32Window(const WindowData window_data) {
 	this->hinstance_ = GetModuleHandle(nullptr);
@@ -80,7 +125,7 @@ Win32Window::Win32Window(const WindowData window_data) {
 	RegisterWindow(this->hinstance_, kWindowClassName);
 
 #if KOZMIC_UNICODE_SUPPORT == KOZMIC_TRUE
-	this->hwnd_ = CreateWin32Window<std::wstring>(
+	this->hwnd_ = CreateWin32Window(
 		this->hinstance_, kWindowClassName, this->window_data_.title,
 		this->window_data_.width, this->window_data_.height);
 #else
