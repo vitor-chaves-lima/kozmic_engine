@@ -4,8 +4,18 @@
 #include <Windows.h>
 #include <string>
 
+#if KOZMIC_UNICODE_SUPPORT == KOZMIC_TRUE
+	const std::wstring kWindowClassName = L"KOZMIC_WINDOW";
+#else
+	const std::string kWindowClassName = "KOZMIC_WINDOW";
+#endif
+
 struct WindowData {
+#if KOZMIC_UNICODE_SUPPORT == KOZMIC_TRUE
 	const wchar_t* title;
+#else
+    const char* title;
+#endif
 	int width;
 	int height;
 };
@@ -13,7 +23,7 @@ struct WindowData {
 class Win32Window {
 private:
 	WindowData window_data_{};
-	std::wstring window_class_name_;
+
 	HINSTANCE hinstance_;
 	HWND hwnd_;
 
@@ -25,7 +35,7 @@ public:
 
 	void Show() const;
 	void Update();
-	bool IsOpen() const;
+	[[nodiscard]] bool IsOpen() const;
 };
 
 #endif //SANDBOX_WIN32_WINDOW_H_
