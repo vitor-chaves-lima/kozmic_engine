@@ -118,7 +118,7 @@ HWND CreateWin32Window(const HINSTANCE& hinstance,
 }
 #endif
 
-kozmic::platform::win32::Window::Window(const WindowData window_data) {
+kozmic::platform::win32::Win32Window::Win32Window(const WindowData window_data) {
 	this->hinstance_ = GetModuleHandle(nullptr);
 	this->window_data_ = window_data;
 
@@ -137,12 +137,12 @@ kozmic::platform::win32::Window::Window(const WindowData window_data) {
 	this->is_open_ = true;
 }
 
-kozmic::platform::win32::Window::~Window() {
+kozmic::platform::win32::Win32Window::~Win32Window() {
 	UnregisterWindow(this->hinstance_, kWindowClassName);
 	DestroyWindow(this->hwnd_);
 }
 
-void kozmic::platform::win32::Window::Update() {
+void kozmic::platform::win32::Win32Window::Update() {
 	MSG msg;
 	if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
 		if (msg.message == WM_QUIT) {
@@ -154,10 +154,10 @@ void kozmic::platform::win32::Window::Update() {
 	}
 }
 
-void kozmic::platform::win32::Window::Show() const {
+void kozmic::platform::win32::Win32Window::Show() {
 	ShowWindow(this->hwnd_, SW_SHOW);
 }
 
-bool kozmic::platform::win32::Window::IsOpen() const {
+bool kozmic::platform::win32::Win32Window::IsOpen() const {
 	return this->is_open_;
 }
