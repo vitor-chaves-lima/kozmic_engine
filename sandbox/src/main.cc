@@ -1,14 +1,14 @@
-#include <kozmic/platform/win32/win32_window.h>
+#include <kozmic/core/window/window_manager.h>
 
 int main() {
-	constexpr auto window_data =
-		kozmic::WindowData{L"Kozmic Sandbox", 1280, 720};
-	const auto win32_window = new kozmic::platform::win32::Win32Window(window_data);
-	win32_window->Show();
+	constexpr auto window_data = kozmic::WindowData{L"Kozmic Sandbox", 1280, 720};
+	const auto window = kozmic::WindowManager::Create(window_data);
 
-	while (win32_window->IsOpen()) {
-		win32_window->Update();
+	window->Show();
+
+	while (window->IsOpen()) {
+		window->Update();
 	}
 
-	delete win32_window;
+	delete window;
 }

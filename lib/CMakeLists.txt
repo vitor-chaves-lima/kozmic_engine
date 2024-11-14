@@ -1,10 +1,14 @@
-get_platform_sources(${KOZMIC_PLATFORM} PLATFORM_SOURCES)
+get_directory_sources("${CMAKE_SOURCE_DIR}/lib/src/platform/${KOZMIC_PLATFORM}" PLATFORM_SOURCES)
 message(STATUS "Platform sources: ${PLATFORM_SOURCES}")
+
+get_directory_sources("${CMAKE_SOURCE_DIR}/lib/src/core" CORE_SOURCES)
+message(STATUS "Core sources: ${CORE_SOURCES}")
 
 set(KOZMIC_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/lib/include)
 
 add_library(kozmic
         ${PLATFORM_SOURCES}
+        ${CORE_SOURCES}
 )
 
 target_include_directories(kozmic PUBLIC ${KOZMIC_INCLUDE_DIR})
