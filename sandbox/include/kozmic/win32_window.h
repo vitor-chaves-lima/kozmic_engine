@@ -5,16 +5,16 @@
 #include <string>
 
 #if KOZMIC_UNICODE_SUPPORT == KOZMIC_TRUE
-	const std::wstring kWindowClassName = L"KOZMIC_WINDOW";
+const std::wstring kWindowClassName = L"KOZMIC_WINDOW";
 #else
-	const std::string kWindowClassName = "KOZMIC_WINDOW";
+const std::string kWindowClassName = "KOZMIC_WINDOW";
 #endif
 
 struct WindowData {
 #if KOZMIC_UNICODE_SUPPORT == KOZMIC_TRUE
 	const wchar_t* title;
 #else
-    const char* title;
+	const char* title;
 #endif
 	int width;
 	int height;

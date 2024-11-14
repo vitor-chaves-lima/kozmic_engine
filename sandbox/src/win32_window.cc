@@ -53,12 +53,12 @@ void UnregisterWindow(const HINSTANCE& hinstance,
 template <typename STRING_TYPE>
 HWND CreateWin32Window(const HINSTANCE& hinstance,
 					   const STRING_TYPE& window_class_name,
-					   const STRING_TYPE& title,
-					   const int width, const int height) {
+					   const STRING_TYPE& title, const int width,
+					   const int height) {
 	const HWND& hwnd = CreateWindowExW(
 		0,																// dwExStyle
-		window_class_name.c_str(),										// lpClassName
-		title.c_str(),													// lpWindowName
+		window_class_name.c_str(),					  					// lpClassName
+		title.c_str(),								  					// lpWindowName
 		WS_OVERLAPPEDWINDOW,											// dwStyle
 		CW_USEDEFAULT, CW_USEDEFAULT, width, height,				// X, Y, nWidth, nHeight
 		nullptr, nullptr, hinstance, nullptr);	// hWndParent, hMenu, hInstance, lpParam
@@ -99,7 +99,7 @@ Win32Window::~Win32Window() {
 
 void Win32Window::Update() {
 	MSG msg;
-	if (PeekMessage(&msg, nullptr, NULL, NULL, PM_REMOVE)) {
+	if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
 		if (msg.message == WM_QUIT) {
 			this->is_open_ = false;
 		} else {
