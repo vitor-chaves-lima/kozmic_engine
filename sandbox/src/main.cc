@@ -1,4 +1,4 @@
-#include <kozmic/win32_window.h>
+#include <kozmic/platform/win32/win32_window.h>
 
 int main() {
 	constexpr auto window_data = WindowData{L"Kozmic Sandbox", 1280, 720};
