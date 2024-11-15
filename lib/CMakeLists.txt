@@ -1,8 +1,11 @@
-get_directory_sources("${CMAKE_SOURCE_DIR}/lib/src/platform/${KOZMIC_PLATFORM}" PLATFORM_SOURCES)
-get_directory_sources("${CMAKE_SOURCE_DIR}/lib/src/core" CORE_SOURCES)
-
 check_graphics_libraries_available(AVAILABLE_GRAPHICS_LIBRARIES)
 message(STATUS "Available graphics libraries: ${AVAILABLE_GRAPHICS_LIBRARIES}")
+
+get_directory_sources("${CMAKE_SOURCE_DIR}/lib/src/platform/${KOZMIC_PLATFORM}" PLATFORM_SOURCES)
+message(STATUS "Platform sources: ${PLATFORM_SOURCES}")
+
+get_directory_sources("${CMAKE_SOURCE_DIR}/lib/src/core" CORE_SOURCES)
+message(STATUS "Core sources: ${CORE_SOURCES}")
 
 set(KOZMIC_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/lib/include)
 
